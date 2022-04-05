@@ -26,7 +26,7 @@ export default {
             <div class="items-center justify-center flex">
                 <div class="flex flex-row" v-for="(nav, index) in navs" :key="index">
                     <router-link :to="nav.route" 
-                    class="ml-5 text-sm font-medium text-black transition-colors duration-200 transform hover:text-blue-500"
+                    class="ml-5 text-lg font-medium text-black transition-colors duration-200 transform hover:text-blue-500"
                     active-class="border-b-2 border-secondary-500">{{ nav.name }}</router-link>
                 </div>
             </div>
