@@ -385,7 +385,7 @@ export default {
                             Tergolong fakir/miskin semenjak sebelum Covid
                             </label>
                         </div>
-                        <div class="flex">
+                        <div class="flex flex-wrap">
                             <input 
                             type="radio" 
                             v-model="form.lainnya" 
