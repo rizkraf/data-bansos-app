@@ -1,131 +1,418 @@
 <script>
+import useValidate from "@vuelidate/core";
+import { required, helpers } from "@vuelidate/validators";
+
 export default {
-    data: () => ({
-        form: {
-            nama: '',
-            nik: null,
-            noKk: null,
-            fotoKtp: null,
-            fotoKk: null,
-            umur: null,
-            jenisKelamin: '',
-            alamat: '',
-            rt: '',
-            rw: '',
-            penghasilanSebelum: null,
-            penghasilanSetelah: null,
-            alasan: '',
-            lainnya: false
+    data () {
+        return {
+            v$: useValidate(),
+            form: {
+                nama: '',
+                nik: null,
+                noKk: null,
+                fotoKtp: null,
+                fotoKk: null,
+                umur: null,
+                jenisKelamin: '',
+                alamat: '',
+                rt: '',
+                rw: '',
+                penghasilanSebelum: null,
+                penghasilanSetelah: null,
+                alasan: '',
+                lainnya: false
+            }
         }
-    }),
+    },
     methods: {
         onChange(e) {
             this.form.fotoKtp = this.$refs.ktp.files[0]
             this.form.fotoKk = this.$refs.kk.files[0]
     },
         submitForm() {
-            
-            console.info(this.form)
+            this.v$.$validate()
+            if (!this.v$.$error) { 
+                alert('Form successfully submitted.')
+                console.log(this.form)
+                } else {
+                    alert('Form failed validation')
+                }
         }
-    }
+    },
+    validations() {
+        return {
+            form: {
+                nama: { required: helpers.withMessage('Nama harus diisi', required) },
+                nik: { required },
+                noKk: { required },
+                fotoKtp: { required },
+                fotoKk: { required },
+                umur: { required },
+                jenisKelamin: { required },
+                alamat: { required },
+                rt: { required },
+                rw: { required },
+                penghasilanSebelum: { required },
+                penghasilanSetelah: { required },
+                alasan: { required },
+            }
+        };
+    },
 }
 </script>
 
 <template>
     <section class="max-w-4xl p-6 my-8 mx-auto bg-white rounded-md shadow-md">
-        <h2 class="text-lg font-semibold text-gray-700 capitalize">Isi Formulir</h2>
+        <h4 class="text-3xl font-semibold text-grey-800 capitalize">Isi Formulir</h4>
         
         <form @submit.prevent="submitForm">
             <div class="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
                 <div>
-                    <label class="text-gray-700" for="nama_lengkap">Nama Lengkap</label>
-                    <input v-model="form.nama" id="nama_lengkap" type="text" class="form-input">
+                    <label 
+                    class="text-grey-800" 
+                    :class="{'text-warning-700' : v$.form.nama.$error}" 
+                    for="nama_lengkap">Nama Lengkap</label>
+                    <input 
+                    v-model="form.nama" 
+                    id="nama_lengkap" 
+                    type="text" 
+                    placeholder="Masukkan nama lengkap" 
+                    class="form-input" 
+                    :class="{'form-input-error' : v$.form.nama.$error}">
+                    <span 
+                    class="text-warning-700 mt-2 block text-sm" 
+                    v-if="v$.form.nama.$error">
+                        {{ v$.form.nama.$errors[0].$message }}
+                    </span>
                 </div>
 
                 <div>
-                    <label class="text-gray-700" for="nik">NIK</label>
-                    <input v-model="form.nik" id="nik" type="number" class="form-input">
+                    <label 
+                    class="text-grey-800" 
+                    :class="{'text-warning-700' : v$.form.nik.$error}" 
+                    for="nik">NIK</label>
+                    <input 
+                    v-model="form.nik" 
+                    id="nik" 
+                    type="number" 
+                    placeholder="Masukkan 16 digit NIK" 
+                    class="form-input" 
+                    :class="{'form-input-error' : v$.form.nik.$error}">
+                    <span 
+                    class="text-warning-700 mt-2 block text-sm" 
+                    v-if="v$.form.nik.$error">
+                        {{ v$.form.nik.$errors[0].$message }}
+                    </span>
                 </div>
 
                 <div>
-                    <label class="text-gray-700" for="kartu_keluarga">No. Kartu Keluarga</label>
-                    <input v-model="form.noKk" id="kartu_keluarga" type="number" class="form-input">
+                    <label 
+                    class="text-grey-800" 
+                    :class="{'text-warning-700' : v$.form.noKk.$error}" 
+                    for="kartu_keluarga">No. Kartu Keluarga</label>
+                    <input 
+                    v-model="form.noKk" 
+                    id="kartu_keluarga" 
+                    type="number" 
+                    placeholder="Masukkan 16 digit Kartu Keluarga" 
+                    class="form-input" 
+                    :class="{'form-input-error' : v$.form.noKk.$error}">
+                    <span 
+                    class="text-warning-700 mt-2 block text-sm" 
+                    v-if="v$.form.noKk.$error">
+                        {{ v$.form.noKk.$errors[0].$message }}
+                    </span>
                 </div>
 
                 <div>
-                    <label class="text-gray-700" for="foto_ktp">Foto KTP</label>
-                    <input id="foto_ktp" type="file" ref="ktp" accept=".jpg, .jpeg, .png, .bmp" @change="onChange" class="form-input">
+                    <label 
+                    class="text-grey-800" 
+                    :class="{'text-warning-700' : v$.form.fotoKtp.$error}" 
+                    for="foto_ktp">Foto KTP</label>
+                    <input 
+                    id="foto_ktp" 
+                    type="file" 
+                    ref="ktp" 
+                    accept=".jpg, .jpeg, .png, .bmp" 
+                    @change="onChange" 
+                    class="form-input" 
+                    :class="{'form-input-error' : v$.form.fotoKtp.$error}">
+                    <span 
+                    class="text-warning-700 mt-2 block text-sm" 
+                    v-if="v$.form.fotoKtp.$error">
+                        {{ v$.form.fotoKtp.$errors[0].$message }}
+                    </span>
                 </div>
 
                 <div>
-                    <label class="text-gray-700" for="foto_kk">Foto Kartu Keluarga</label>
-                    <input id="foto_kk" type="file" ref="kk" accept=".jpg, .jpeg, .png, .bmp" @change="onChange" class="form-input">
+                    <label 
+                    class="text-grey-800" 
+                    :class="{'text-warning-700' : v$.form.fotoKk.$error}" 
+                    for="foto_kk">Foto Kartu Keluarga</label>
+                    <input 
+                    id="foto_kk" 
+                    type="file" 
+                    ref="kk" 
+                    accept=".jpg, .jpeg, .png, .bmp" 
+                    @change="onChange" class="form-input" 
+                    :class="{'form-input-error' : v$.form.fotoKk.$error}">
+                    <span 
+                    class="text-warning-700 mt-2 block text-sm" 
+                    v-if="v$.form.fotoKk.$error">
+                        {{ v$.form.fotoKk.$errors[0].$message }}
+                    </span>
                 </div>
 
                 <div>
-                    <label class="text-gray-700" for="umur">Umur</label>
-                    <input v-model="form.umur" id="umur" type="number" class="form-input">
+                    <label 
+                    class="text-grey-800" 
+                    :class="{'text-warning-700' : v$.form.umur.$error}" 
+                    for="umur">Umur</label>
+                    <input 
+                    v-model="form.umur" 
+                    id="umur" 
+                    type="text" 
+                    placeholder="Masukkan umur" 
+                    class="form-input" 
+                    :class="{'form-input-error' : v$.form.umur.$error}">
+                    <span 
+                    class="text-warning-700 mt-2 block text-sm" 
+                    v-if="v$.form.umur.$error">
+                        {{ v$.form.umur.$errors[0].$message }}
+                    </span>
                 </div>
 
                 <div>
-                    <label class="text-gray-700 block">Jenis Kelamin</label>
+                    <label 
+                    class="text-grey-800 block" 
+                    :class="{'text-warning-700' : v$.form.jenisKelamin.$error}">
+                    Jenis Kelamin
+                    </label>
+                    <label 
+                    class="text-grey-700 text-sm mt-1 block">
+                    Pilih Salah Satu
+                    </label>
+                    <span 
+                    class="text-warning-700 text-sm mt-1" 
+                    v-if="v$.form.jenisKelamin.$error">
+                        {{ v$.form.jenisKelamin.$errors[0].$message }}
+                    </span>
                     <div class="mt-2">
-                        <input type="radio" name="jenis_kelamin" id="laki-laki" value="Laki-Laki" v-model="form.jenisKelamin" class="bg-white border border-gray-400 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring">
-                        <label class="ml-1 text-gray-700" for="laki-laki">Laki-Laki</label>
-                        <input type="radio" name="jenis_kelamin" id="perempuan" value="Perempuan" v-model="form.jenisKelamin" class="ml-4 bg-white border border-gray-400 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring">
-                        <label class="ml-1 text-gray-700" for="perempuan">Perempuan</label>
+                        <input 
+                        type="radio" 
+                        name="jenis_kelamin" 
+                        id="laki-laki" 
+                        value="Laki-Laki" 
+                        v-model="form.jenisKelamin" 
+                        class="bg-white border border-grey-400 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring">
+                        <label 
+                        class="ml-1 text-grey-800" 
+                        for="laki-laki">
+                        Laki-Laki
+                        </label>
+                        <input 
+                        type="radio" 
+                        name="jenis_kelamin" 
+                        id="perempuan" 
+                        value="Perempuan" 
+                        v-model="form.jenisKelamin" 
+                        class="ml-4 bg-white border border-grey-400 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring">
+                        <label 
+                        class="ml-1 text-grey-800" 
+                        for="perempuan">
+                        Perempuan
+                        </label>
                     </div>
                 </div>
 
                 <div>
-                    <label class="text-gray-700">Alamat</label>
-                    <textarea v-model="form.alamat" class="block h-48 w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-400 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring"></textarea>
+                    <label 
+                    class="text-grey-800" 
+                    :class="{'text-warning-700' : v$.form.alamat.$error}">
+                    Alamat
+                    </label>
+                    <textarea 
+                    v-model="form.alamat" 
+                    placeholder="Masukkan alamat" 
+                    class="form-input h-48" 
+                    :class="{'form-input-error' : v$.form.alamat.$error}">
+                    </textarea>
+                    <span 
+                    class="text-warning-700 mt-2 block text-sm" 
+                    v-if="v$.form.alamat.$error">
+                        {{ v$.form.alamat.$errors[0].$message }}
+                    </span>
                 </div>
 
                 <div>
-                    <label class="text-gray-700" for="rt">RT</label>
-                    <input v-model="form.rt" id="rt" type="text" class="form-input">
+                    <label 
+                    class="text-grey-800" 
+                    :class="{'text-warning-700' : v$.form.rt.$error}" 
+                    for="rt">
+                    RT
+                    </label>
+                    <input 
+                    v-model="form.rt" 
+                    id="rt" 
+                    placeholder="Masukkan RT" 
+                    type="text" 
+                    class="form-input" 
+                    :class="{'form-input-error' : v$.form.rt.$error}">
+                    <span 
+                    class="text-warning-700 mt-2 block text-sm" 
+                    v-if="v$.form.rt.$error">
+                        {{ v$.form.rt.$errors[0].$message }}
+                    </span>
                 </div>
 
                 <div>
-                    <label class="text-gray-700" for="rw">RW</label>
-                    <input v-model="form.rw" id="rw" type="text" class="form-input">
+                    <label 
+                    class="text-grey-800" 
+                    :class="{'text-warning-700' : v$.form.rw.$error}" 
+                    for="rw">
+                    RW
+                    </label>
+                    <input 
+                    v-model="form.rw" 
+                    id="rw" 
+                    placeholder="Masukkan RW" 
+                    type="text" 
+                    class="form-input" 
+                    :class="{'form-input-error' : v$.form.rw.$error}">
+                    <span 
+                    class="text-warning-700 mt-2 block text-sm" 
+                    v-if="v$.form.rw.$error">
+                        {{ v$.form.rw.$errors[0].$message }}
+                    </span>
                 </div>
 
                 <div>
-                    <label class="text-gray-700" for="umur">Penghasilan sebelum pandemi</label>
-                    <input v-model="form.penghasilanSebelum" id="umur" type="number" class="form-input">
+                    <label 
+                    class="text-grey-800" 
+                    :class="{'text-warning-700' : v$.form.penghasilanSebelum.$error}" 
+                    for="penghasilan_sebelum">
+                    Penghasilan sebelum pandemi
+                    </label>
+                    <input 
+                    v-model="form.penghasilanSebelum" 
+                    id="penghasilan_sebelum" 
+                    placeholder="Masukkan penghasilan sebelum pandemi" 
+                    type="text" class="form-input" 
+                    :class="{'form-input-error' : v$.form.penghasilanSebelum.$error}">
+                    <span 
+                    class="text-warning-700 mt-2 block text-sm" 
+                    v-if="v$.form.penghasilanSebelum.$error">
+                        {{ v$.form.penghasilanSebelum.$errors[0].$message }}
+                    </span>
                 </div>
 
                 <div>
-                    <label class="text-gray-700" for="umur">Penghasilan setelah pandemi</label>
-                    <input v-model="form.penghasilanSetelah" id="umur" type="number" class="form-input">
+                    <label 
+                    class="text-grey-800" 
+                    :class="{'text-warning-700' : v$.form.penghasilanSetelah.$error}" 
+                    for="penghasilan_setelah">
+                    Penghasilan setelah pandemi
+                    </label>
+                    <input 
+                    v-model="form.penghasilanSetelah" 
+                    id="penghasilan_setelah" 
+                    type="text" 
+                    placeholder="Masukkan penghasilan setelah pandemi" 
+                    class="form-input" 
+                    :class="{'form-input-error' : v$.form.penghasilanSetelah.$error}">
+                    <span 
+                    class="text-warning-700 mt-2 block text-sm" 
+                    v-if="v$.form.penghasilanSetelah.$error">
+                        {{ v$.form.penghasilanSetelah.$errors[0].$message }}
+                    </span>
                 </div>
 
                 <div>
-                    <label class="text-gray-700">Alasan membutuhkan bantuan</label>
+                    <label 
+                    class="text-grey-800 block" 
+                    :class="{'text-warning-700' : v$.form.alasan.$error}">
+                    Alasan membutuhkan bantuan
+                    </label>
+                    <label 
+                    class="text-grey-700 text-sm mt-1 block">
+                    Pilih Salah Satu
+                    </label>
+                    <span 
+                    class="text-warning-700 text-sm mt-1 block" 
+                    v-if="v$.form.alasan.$error">
+                            {{ v$.form.alasan.$errors[0].$message }}
+                        </span>
                     <div class="mt-2">
                         <div>
-                            <input type="radio" v-model="form.alasan" value="Kehilangan pekerjaan" name="alasan" id="kehilangan_pekerjaan">
-                            <label class="ml-1 text-gray-700" for="kehilangan_pekerjaan">Kehilangan pekerjaan</label>
+                            <input 
+                            type="radio" 
+                            v-model="form.alasan" 
+                            value="Kehilangan pekerjaan" 
+                            name="alasan" 
+                            id="kehilangan_pekerjaan">
+                            <label 
+                            class="ml-1 text-grey-800" 
+                            for="kehilangan_pekerjaan">
+                            Kehilangan pekerjaan
+                            </label>
                         </div>
                         <div>
-                            <input type="radio" v-model="form.alasan" value="Kepala keluarga terdampak atau korban Covid" class="bg-white border border-gray-400 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring" name="alasan" id="terdampak_covid">
-                            <label class="ml-1 text-gray-700" for="terdampak_covid">Kepala keluarga terdampak atau korban Covid</label>
+                            <input 
+                            type="radio" 
+                            v-model="form.alasan" 
+                            value="Kepala keluarga terdampak atau korban Covid" 
+                            class="bg-white border border-grey-400 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring" 
+                            name="alasan" 
+                            id="terdampak_covid">
+                            <label 
+                            class="ml-1 text-grey-800" 
+                            for="terdampak_covid">
+                            Kepala keluarga terdampak atau korban Covid
+                            </label>
                         </div>
                         <div>
-                            <input type="radio" v-model="form.alasan" value="Tergolong fakir/miskin semenjak sebelum Covid" class="bg-white border border-gray-400 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring" name="alasan" id="tergolong_fakir">
-                            <label class="ml-1 text-gray-700" for="tergolong_fakir">Tergolong fakir/miskin semenjak sebelum Covid</label>
+                            <input 
+                            type="radio" 
+                            v-model="form.alasan" 
+                            value="Tergolong fakir/miskin semenjak sebelum Covid" 
+                            class="bg-white border border-grey-400 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring" 
+                            name="alasan" 
+                            id="tergolong_fakir">
+                            <label 
+                            class="ml-1 text-grey-800" 
+                            for="tergolong_fakir">
+                            Tergolong fakir/miskin semenjak sebelum Covid
+                            </label>
                         </div>
                         <div>
-                            <input type="radio" v-model="form.lainnya" :value="true" class="bg-white border border-gray-400 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring" name="alasan" id="lainnya">
-                            <label class="ml-1 text-gray-700" for="lainnya">Lainnya</label>
-                            <input type="text" v-model="form.alasan" v-if="form.lainnya == true" class="form-input" placeholder="Isi untuk alasan lainnya">
+                            <input 
+                            type="radio" 
+                            v-model="form.lainnya" 
+                            :value="true" 
+                            class="bg-white border border-grey-400 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring" 
+                            name="alasan" 
+                            id="lainnya">
+                            <label 
+                            class="ml-1 text-grey-800" 
+                            for="lainnya">
+                            Lainnya
+                            </label>
+                            <input 
+                            type="text" 
+                            v-model="form.alasan" 
+                            v-if="form.lainnya == true" 
+                            class="form-input" 
+                            placeholder="Isi untuk alasan lainnya">
                         </div>
 
                         <div class="flex items-start mt-6">
-                            <input type="checkbox" class="flex items-center px-4 py-2 h-6 text-gray-700 bg-white border border-gray-400 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring">
-                            <label class="ml-1 text-gray-700">Saya menyatakan bahwa data yang diisikan adalah benar dan siap mempertanggungjawabkan apabila ditemukan ketidaksesuaian dalam data tersebut</label>
+                            <input 
+                            type="checkbox" 
+                            class="flex items-center px-4 py-2 h-6 text-grey-800 bg-white border border-grey-400 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring">
+                            <label 
+                            class="ml-1 text-grey-800">
+                            Saya menyatakan bahwa data yang diisikan adalah benar dan siap mempertanggungjawabkan apabila ditemukan ketidaksesuaian dalam data tersebut
+                            </label>
                         </div>
                     </div>
                 </div>
