@@ -1,6 +1,8 @@
 <script>
 import useValidate from "@vuelidate/core";
-import { required, helpers } from "@vuelidate/validators";
+import { required, alpha, alphaNum, numeric, helpers, maxLength, minLength, minValue } from "@vuelidate/validators";
+
+const checkedTerms = (value) => value === true
 
 export default {
     data () {
@@ -20,8 +22,9 @@ export default {
                 penghasilanSebelum: null,
                 penghasilanSetelah: null,
                 alasan: '',
-                lainnya: false
-            }
+            },
+            lainnya: false,
+            checked: false
         }
     },
     methods: {
@@ -31,7 +34,7 @@ export default {
     },
         submitForm() {
             this.v$.$validate()
-            if (!this.v$.$error) { 
+            if (!this.v$.$error && this.checked === true) { 
                 alert('Form successfully submitted.')
                 console.log(this.form)
                 } else {
@@ -42,20 +45,55 @@ export default {
     validations() {
         return {
             form: {
-                nama: { required: helpers.withMessage('Nama harus diisi', required) },
-                nik: { required },
-                noKk: { required },
-                fotoKtp: { required },
-                fotoKk: { required },
-                umur: { required },
-                jenisKelamin: { required },
-                alamat: { required },
-                rt: { required },
-                rw: { required },
-                penghasilanSebelum: { required },
-                penghasilanSetelah: { required },
-                alasan: { required },
-            }
+                nama: { 
+                    required: helpers.withMessage('Nama wajib diisi', required), 
+                    },
+                nik: { 
+                    required: helpers.withMessage('NIK wajib diisi', required), 
+                    maxLength: helpers.withMessage('NIK harus terdiri dari 16 digit', maxLength(16)), 
+                    minLength: helpers.withMessage('NIK harus terdiri dari 16 digit', minLength(16)),
+                    numeric 
+                    },
+                noKk: { 
+                    required: helpers.withMessage('No. KK wajib diisi', required),
+                    numeric 
+                    },
+                fotoKtp: { 
+                    required 
+                    },
+                fotoKk: { 
+                    required 
+                    },
+                umur: { 
+                    required: helpers.withMessage('Umur wajib diisi', required), 
+                    minValue: helpers.withMessage('Umur penerima minimal 25 tahun', minValue(25)) 
+                    },
+                jenisKelamin: { 
+                    required: helpers.withMessage('Jenis Kelamin wajib dipilih', required), 
+                    },
+                alamat: { 
+                    required: helpers.withMessage('Alamat wajib diisi', required), 
+                    maxLength: helpers.withMessage('Alamat maksimal 255 karakter', maxLength(255)), 
+                    },
+                rt: { 
+                    required: helpers.withMessage('RT wajib diisi', required), 
+                    },
+                rw: { 
+                    required: helpers.withMessage('RW wajib diisi', required), 
+                    },
+                penghasilanSebelum: { 
+                    required: helpers.withMessage('Penghasilan wajib diisi', required), 
+                    numeric 
+                    },
+                penghasilanSetelah: { 
+                    required: helpers.withMessage('Penghasilan wajib diisi', required), 
+                    numeric 
+                    },
+                alasan: { 
+                    required: helpers.withMessage('Alasan wajib dipilih', required), 
+                    },
+            },
+            checked: { required, checkedTerms: helpers.withMessage('*Wajib di centang', checkedTerms) }
         };
     },
 }
@@ -63,7 +101,7 @@ export default {
 
 <template>
     <section class="max-w-4xl p-6 my-8 mx-auto bg-white rounded-md shadow-md">
-        <h4 class="text-3xl font-semibold text-grey-800 capitalize">Isi Formulir</h4>
+        <h4 class="text-3xl font-semibold text-black capitalize">Isi Formulir</h4>
         
         <form @submit.prevent="submitForm">
             <div class="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
@@ -171,7 +209,7 @@ export default {
                     <input 
                     v-model="form.umur" 
                     id="umur" 
-                    type="text" 
+                    type="number" 
                     placeholder="Masukkan umur" 
                     class="form-input" 
                     :class="{'form-input-error' : v$.form.umur.$error}">
@@ -297,7 +335,7 @@ export default {
                     v-model="form.penghasilanSebelum" 
                     id="penghasilan_sebelum" 
                     placeholder="Masukkan penghasilan sebelum pandemi" 
-                    type="text" class="form-input" 
+                    type="number" class="form-input" 
                     :class="{'form-input-error' : v$.form.penghasilanSebelum.$error}">
                     <span 
                     class="text-warning-700 mt-2 block text-sm" 
@@ -316,7 +354,7 @@ export default {
                     <input 
                     v-model="form.penghasilanSetelah" 
                     id="penghasilan_setelah" 
-                    type="text" 
+                    type="number" 
                     placeholder="Masukkan penghasilan setelah pandemi" 
                     class="form-input" 
                     :class="{'form-input-error' : v$.form.penghasilanSetelah.$error}">
@@ -388,7 +426,7 @@ export default {
                         <div class="flex flex-wrap">
                             <input 
                             type="radio" 
-                            v-model="form.lainnya" 
+                            v-model="lainnya" 
                             :value="true" 
                             class="flex h-[22px] bg-white border border-grey-400 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring" 
                             name="alasan" 
@@ -401,7 +439,7 @@ export default {
                             <input 
                             type="text" 
                             v-model="form.alasan" 
-                            v-if="form.lainnya == true" 
+                            v-if="lainnya == true" 
                             class="form-input" 
                             placeholder="Isi untuk alasan lainnya">
                         </div>
@@ -409,10 +447,16 @@ export default {
                         <div class="flex items-start mt-6">
                             <input 
                             type="checkbox" 
+                            v-model="checked"
                             class="flex items-center px-4 py-2 h-[22px] text-grey-800 bg-white border border-grey-400 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring">
                             <label 
                             class="ml-1 text-grey-800">
                             Saya menyatakan bahwa data yang diisikan adalah benar dan siap mempertanggungjawabkan apabila ditemukan ketidaksesuaian dalam data tersebut
+                            <span 
+                            class="text-warning-700 mt-1 block text-sm" 
+                            v-if="v$.checked.$error">
+                                {{ v$.checked.$errors[0].$message }}
+                            </span>
                             </label>
                         </div>
                     </div>
