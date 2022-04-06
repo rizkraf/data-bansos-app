@@ -197,14 +197,14 @@ export default {
                     v-if="v$.form.jenisKelamin.$error">
                         {{ v$.form.jenisKelamin.$errors[0].$message }}
                     </span>
-                    <div class="mt-2">
+                    <div class="mt-2 flex">
                         <input 
                         type="radio" 
                         name="jenis_kelamin" 
                         id="laki-laki" 
                         value="Laki-Laki" 
                         v-model="form.jenisKelamin" 
-                        class="bg-white border border-grey-400 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring">
+                        class="flex h-[22px] bg-white border border-grey-400 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring">
                         <label 
                         class="ml-1 text-grey-800" 
                         for="laki-laki">
@@ -216,7 +216,7 @@ export default {
                         id="perempuan" 
                         value="Perempuan" 
                         v-model="form.jenisKelamin" 
-                        class="ml-4 bg-white border border-grey-400 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring">
+                        class="flex h-[22px] ml-4 bg-white border border-grey-400 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring">
                         <label 
                         class="ml-1 text-grey-800" 
                         for="perempuan">
@@ -343,11 +343,12 @@ export default {
                             {{ v$.form.alasan.$errors[0].$message }}
                         </span>
                     <div class="mt-2">
-                        <div>
+                        <div class="flex">
                             <input 
                             type="radio" 
                             v-model="form.alasan" 
-                            value="Kehilangan pekerjaan" 
+                            value="Kehilangan pekerjaan"
+                            class="flex h-[22px]" 
                             name="alasan" 
                             id="kehilangan_pekerjaan">
                             <label 
@@ -356,12 +357,12 @@ export default {
                             Kehilangan pekerjaan
                             </label>
                         </div>
-                        <div>
+                        <div class="flex">
                             <input 
                             type="radio" 
                             v-model="form.alasan" 
                             value="Kepala keluarga terdampak atau korban Covid" 
-                            class="bg-white border border-grey-400 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring" 
+                            class="flex h-[22px] bg-white border border-grey-400 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring" 
                             name="alasan" 
                             id="terdampak_covid">
                             <label 
@@ -370,12 +371,12 @@ export default {
                             Kepala keluarga terdampak atau korban Covid
                             </label>
                         </div>
-                        <div>
+                        <div class="flex">
                             <input 
                             type="radio" 
                             v-model="form.alasan" 
                             value="Tergolong fakir/miskin semenjak sebelum Covid" 
-                            class="bg-white border border-grey-400 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring" 
+                            class="flex h-[22px] bg-white border border-grey-400 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring" 
                             name="alasan" 
                             id="tergolong_fakir">
                             <label 
@@ -384,12 +385,12 @@ export default {
                             Tergolong fakir/miskin semenjak sebelum Covid
                             </label>
                         </div>
-                        <div>
+                        <div class="flex">
                             <input 
                             type="radio" 
                             v-model="form.lainnya" 
                             :value="true" 
-                            class="bg-white border border-grey-400 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring" 
+                            class="flex h-[22px] bg-white border border-grey-400 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring" 
                             name="alasan" 
                             id="lainnya">
                             <label 
@@ -408,7 +409,7 @@ export default {
                         <div class="flex items-start mt-6">
                             <input 
                             type="checkbox" 
-                            class="flex items-center px-4 py-2 h-6 text-grey-800 bg-white border border-grey-400 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring">
+                            class="flex items-center px-4 py-2 h-[22px] text-grey-800 bg-white border border-grey-400 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring">
                             <label 
                             class="ml-1 text-grey-800">
                             Saya menyatakan bahwa data yang diisikan adalah benar dan siap mempertanggungjawabkan apabila ditemukan ketidaksesuaian dalam data tersebut
