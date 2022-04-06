@@ -7,7 +7,7 @@ export default {
 <template>
     <div class="container px-6 h-screen-86 mx-auto text-center flex items-center">
         <div class="max-w-lg mx-auto">
-            <h1 class="text-5xl leading-tight font-bold text-black md:text-7xl">Verifikasi data penerima <span
+            <h1 class="text-4xl leading-tight font-bold text-black md:text-7xl">Verifikasi data penerima <span
                     class="text-secondary-600">Bansos</span> dengan mudah</h1>
             <p class="text-lg leading-7 mt-6 font-regular text-black">Aplikasi pendataan penerima Bansos untuk menunjang
                 pejabat RW di seluruh Jawa Barat.</p>
