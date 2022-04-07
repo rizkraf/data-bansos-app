@@ -4,6 +4,14 @@ import { required, alpha, alphaNum, numeric, helpers, maxLength, minLength, minV
 
 const checkedTerms = (value) => value === true
 
+const fileSize = (value, vm) => {
+    if (!value) {
+        return true;
+    }
+    let file = value;
+    return (file.size < 2048)
+}
+
 export default {
     data () {
         return {
@@ -31,6 +39,8 @@ export default {
         onChange(e) {
             this.form.fotoKtp = this.$refs.ktp.files[0]
             this.form.fotoKk = this.$refs.kk.files[0]
+
+
     },
         submitForm() {
             this.v$.$validate()
@@ -59,10 +69,12 @@ export default {
                     numeric 
                     },
                 fotoKtp: { 
-                    required 
+                    required: helpers.withMessage('Foto KTP wajib diisi', required), 
+                    fileSize: helpers.withMessage('Ukuran foto tidak boleh lebih dari 2MB', fileSize)
                     },
                 fotoKk: { 
-                    required 
+                    required: helpers.withMessage('Foto KK wajib disi', required),
+                    fileSize: helpers.withMessage('Ukuran foto tidak boleh lebih dari 2MB', fileSize)
                     },
                 umur: { 
                     required: helpers.withMessage('Umur wajib diisi', required), 
