@@ -9,7 +9,7 @@ const fileSize = (value, vm) => {
         return true;
     }
     let file = value;
-    return (file.size < 2048)
+    return (file.size < 2097152)
 }
 
 export default {
