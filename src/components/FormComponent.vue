@@ -1,6 +1,8 @@
 <script>
 import useValidate from "@vuelidate/core";
-import { required, alpha, alphaNum, numeric, helpers, maxLength, minLength, minValue } from "@vuelidate/validators";
+import { required, numeric, helpers, maxLength, minLength, minValue } from "@vuelidate/validators";
+import AlertSuccess from "./AlertSuccess.vue";
+import AlertError from "./AlertError.vue"
 
 const checkedTerms = (value) => value === true
 
@@ -13,6 +15,10 @@ const fileSize = (value, vm) => {
 }
 
 export default {
+    components: {
+        AlertSuccess,
+        AlertError
+    },
     data () {
         return {
             v$: useValidate(),
@@ -32,25 +38,40 @@ export default {
                 alasan: '',
             },
             lainnya: false,
-            checked: false
+            checked: false,
+            success: false,
+            error: false,
         }
     },
     methods: {
         onChange(e) {
             this.form.fotoKtp = this.$refs.ktp.files[0]
             this.form.fotoKk = this.$refs.kk.files[0]
-
-
-    },
+        },
+        delayCloseAlert() {
+            setTimeout(() => {
+                this.success = false;
+                this.error = false;
+            }, 3000);
+        },
         submitForm() {
+            const normal = parseInt(1500)
+            const time = parseInt(1000 * (Math.random() + 1))
+
             this.v$.$validate()
-            if (!this.v$.$error && this.checked === true) { 
-                alert('Form successfully submitted.')
-                console.log(this.form)
+            if (!this.v$.$error && this.checked === true) {
+                if (time < normal) {
+                    this.success = true
+                    this.delayCloseAlert()
+                    console.log(this.form)
+                    console.log(`Waktu respons: ${time}`)
+                    }
                 } else {
-                    alert('Form failed validation')
+                    this.error = true
+                    this.delayCloseAlert()
+                    console.log(`Waktu respons: ${time}`)
                 }
-        }
+        },
     },
     validations() {
         return {
@@ -113,6 +134,14 @@ export default {
 
 <template>
     <section class="max-w-4xl p-6 my-8 mx-auto bg-white rounded-md shadow-md">
+        <Transition>
+            <AlertSuccess v-if="success == true" />
+        </Transition>
+
+        <Transition>
+            <AlertError v-if="error == true" />
+        </Transition>
+
         <h4 class="text-3xl font-semibold text-black capitalize">Isi Formulir</h4>
         
         <form @submit.prevent="submitForm">
@@ -481,3 +510,15 @@ export default {
         </form>
     </section>
 </template>
+
+<style scoped>
+.v-enter-active,
+.v-leave-active {
+    transition: opacity 0.5s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+    opacity: 0;
+}
+</style>
